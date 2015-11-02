@@ -9,7 +9,7 @@ layers {
     mean_file: "@MEAN_FOLDER@/mean.binaryproto"
     batch_size: @BATCHSIZE@
     scale: 0.00390625
-    randomize_data_sampling: 0
+    #randomize_data_sampling: 0
   }
 }
 layers {

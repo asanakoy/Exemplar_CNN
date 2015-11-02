@@ -10,7 +10,7 @@ momentum: @MOMENTUM@
 weight_decay: @WEIGHT_DECAY@
 snapshot: @SNAPSHOT_ITER@
 snapshot_prefix: "@EXPERIMENT_NAME@"
-termination_criterion: MAX_ITER
+#termination_criterion: MAX_ITER
 device_id: 0
-snapshot_on_exit: 1
-
+#snapshot_on_exit: 1
+snapshot_after_train: 1
