@@ -75,6 +75,14 @@ for nimage=1:num_selected_images
         %patchShow(sampling_probmap{nimage}{nscale});  pause;
         image_probs(nimage) = sum(sampling_probmap{nimage}{nscale}(:))/(size(sampling_probmap{nimage}{nscale},1)-2*borderwidth)/...
             (size(sampling_probmap{nimage}{nscale},2)-2*borderwidth)/(size(sampling_probmap{nimage}{nscale},3));
+        
+        if isnan(image_probs(nimage))
+            fprintf('mage_probs(%d) == NAN!\n', nimage);
+
+        end
+        assert(~isnan(image_probs(nimage)), 'Probability == NAN!');
+
+        
         textprogressbar(round(nimage/numel(selected_images)*100));     
     end
 end

@@ -11,25 +11,31 @@ BATCHSIZE=${10}
 POSTFIX=${11}
 
 ROOT_PATH=`cd ../..; pwd`
-CAFFE_TOOLS_PATH=/home/dosovits/MATLAB/toolboxes/caffe_all/.build_release/tools
+echo "----ROOT_PATH=${ROOT_PATH}"
+
+CAFFE_TOOLS_PATH=${CAFFE_ROOT}/build/tools
 EXPERIMENT_NAME=${ARCH_NAME}_${DATASET_NAME}-${INIT_NUM_CLASSES}-${FINAL_NUM_CLASSES}_${POSTFIX}
 CONFIG_TEMPLATE_PATH=$ROOT_PATH/data/nets_config/${ARCH_NAME}/template
 CONFIG_OUT_PATH=$ROOT_PATH/data/nets_config/${ARCH_NAME}/result
-SAVE_PATH=$ROOT_PATH/results/${EXPERIMENT_NAME}
-DATA_PATH=$ROOT_PATH/data/${DATASET_NAME}
+TRAIN_NET_COMMAND="${CAFFE_TOOLS_PATH}/caffe train -solver"
+
+# IMPORTANT TO CHANGE DATA_PATH
+DATA_PATH="$HOME/workspace/OlympicSports/exemplar_cnn/${DATASET_NAME}_leveldb"  
+SAVE_PATH="$HOME/workspace/OlympicSports/exemplar_cnn/results/${EXPERIMENT_NAME}"
 LOG_FILE=$SAVE_PATH/train_log.txt
-TRAIN_NET_COMMAND=${CAFFE_TOOLS_PATH}/train_net.bin
+
+mkdir -p $SAVE_PATH
 
 # YOU MOST PROBABLY NEED TO CHANGE THIS:
 # set up the environment 
 echo "Setting up the environment" >> $LOG_FILE
-export C_INCLUDE_PATH=$C_INCLUDE_PATH:/misc/software-lin/lmbsoft/boost_1_50_0-x86_64-gcc4.4.3/include/
-export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/misc/software-lin/lmbsoft/boost_1_50_0-x86_64-gcc4.4.3/include/
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/intel/lib/intel64:~/intel/ipp/lib/intel64/:/misc/software-lin/lmbsoft/cudatoolkit-5.5.22-x86_64/lib64/:/misc/software-lin/lmbsoft/cudatoolkit-5.0.7-x86_64/cuda/lib64/:/misc/software-lin/lmbsoft/cudatoolkit-4.2.9-x86_64/cuda/lib64/:/misc/software-lin/lmbsoft/cudatoolkit-3.2.16-x86_64/cuda/lib64/:/misc/software-lin/lmbsoft/cudatoolkit-5.0.7-x86_64/cuda/include/:/misc/software-lin/lmbsoft/boost_1_50_0-x86_64-gcc4.4.3/lib/:/home/dosovits/intel/mkl/lib/intel64/:/home/dosovits/Programs/glog/lib/:/home/dosovits/Programs/libs/
+#export C_INCLUDE_PATH=$C_INCLUDE_PATH:/misc/software-lin/lmbsoft/boost_1_50_0-x86_64-gcc4.4.3/include/
+#export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/misc/software-lin/lmbsoft/boost_1_50_0-x86_64-gcc4.4.3/include/
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/intel/lib/intel64:~/intel/ipp/lib/intel64/:/misc/software-lin/lmbsoft/cudatoolkit-5.5.22-x86_64/lib64/:/misc/software-lin/lmbsoft/cudatoolkit-5.0.7-x86_64/cuda/lib64/:/misc/software-lin/lmbsoft/cudatoolkit-4.2.9-x86_64/cuda/lib64/:/misc/software-lin/lmbsoft/cudatoolkit-3.2.16-x86_64/cuda/lib64/:/misc/software-lin/lmbsoft/cudatoolkit-5.0.7-x86_64/cuda/include/:/misc/software-lin/lmbsoft/boost_1_50_0-x86_64-gcc4.4.3/lib/:/home/dosovits/intel/mkl/lib/intel64/:/home/dosovits/Programs/glog/lib/:/home/dosovits/Programs/libs/
 export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6
-export PATH=/home/dosovits/bin:$PATH
-export PATH=/home/dosovits/Programs/psched/bin:$PATH
-export PATH=/home/dosovits/Programs/php/usr/bin:$PATH
+#export PATH=/home/dosovits/bin:$PATH
+#export PATH=/home/dosovits/Programs/psched/bin:$PATH
+#export PATH=/home/dosovits/Programs/php/usr/bin:$PATH
 
 PRETRAIN_WEIGHTDECAY=`echo "scale=6; ${WEIGHTDECAY}*1." | bc`
 PRETRAIN_LR=`echo "scale=6; ${INIT_LR}*1." | bc`
@@ -245,7 +251,7 @@ echo "$FINAL_NUM_ITER iterations with learning rate $INIT_LR, weight decay ${WEI
 echo ""
 
 GLOG_logtostderr=1 ${TRAIN_NET_COMMAND} \
-${CONFIG_OUT_PATH}/solver0.prototxt ${SAVE_PATH}/${EXPERIMENT_NAME}_pretrain_iter_${INIT_NUM_ITER}.solverstate 2>> $LOG_FILE
+${CONFIG_OUT_PATH}/solver0.prototxt -snapshot ${SAVE_PATH}/${EXPERIMENT_NAME}_pretrain_iter_${INIT_NUM_ITER}.solverstate 2>> $LOG_FILE
 
 echo ""
 echo " ====== Second run ====== "
@@ -253,7 +259,7 @@ echo "$NUM_ITER_1 iterations with learning rate $LR_1, weight decay ${WEIGHTDECA
 echo ""
 
 GLOG_logtostderr=1 ${TRAIN_NET_COMMAND} \
-${CONFIG_OUT_PATH}/solver1.prototxt ${SAVE_PATH}/${EXPERIMENT_NAME}_iter_${END_ITER_0}.solverstate 2>> $LOG_FILE
+${CONFIG_OUT_PATH}/solver1.prototxt -snapshot ${SAVE_PATH}/${EXPERIMENT_NAME}_iter_${END_ITER_0}.solverstate 2>> $LOG_FILE
 
 echo ""
 echo " ====== Third run ====== "
@@ -261,7 +267,7 @@ echo "$NUM_ITER_2 iterations with learning rate $LR_2, weight decay ${WEIGHTDECA
 echo ""
 
 GLOG_logtostderr=1 ${TRAIN_NET_COMMAND} \
-${CONFIG_OUT_PATH}/solver2.prototxt ${SAVE_PATH}/${EXPERIMENT_NAME}_iter_${END_ITER_1}.solverstate 2>> $LOG_FILE
+${CONFIG_OUT_PATH}/solver2.prototxt -snapshot ${SAVE_PATH}/${EXPERIMENT_NAME}_iter_${END_ITER_1}.solverstate 2>> $LOG_FILE
 
 echo ""
 echo " ====== Fourth run ====== "
@@ -269,7 +275,7 @@ echo "$NUM_ITER_3 iterations with learning rate $LR_3, weight decay ${WEIGHTDECA
 echo ""
 
 GLOG_logtostderr=1 ${TRAIN_NET_COMMAND} \
-${CONFIG_OUT_PATH}/solver3.prototxt ${SAVE_PATH}/${EXPERIMENT_NAME}_iter_${END_ITER_2}.solverstate 2>> $LOG_FILE
+${CONFIG_OUT_PATH}/solver3.prototxt -snapshot ${SAVE_PATH}/${EXPERIMENT_NAME}_iter_${END_ITER_2}.solverstate 2>> $LOG_FILE
 
 echo ""
 echo " ====== Fifth run ====== "
@@ -277,7 +283,7 @@ echo "$NUM_ITER_4 iterations with learning rate $LR_4, weight decay ${WEIGHTDECA
 echo ""
 
 GLOG_logtostderr=1 ${TRAIN_NET_COMMAND} \
-${CONFIG_OUT_PATH}/solver4.prototxt ${SAVE_PATH}/${EXPERIMENT_NAME}_iter_${END_ITER_3}.solverstate 2>> $LOG_FILE
+${CONFIG_OUT_PATH}/solver4.prototxt -snapshot ${SAVE_PATH}/${EXPERIMENT_NAME}_iter_${END_ITER_3}.solverstate 2>> $LOG_FILE
 
 if [ "${POSTFIX}" -gt 1 ]
 then
