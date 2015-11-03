@@ -1,8 +1,7 @@
 train_net: "@TRAIN_NET_CONFIG@"
-test_net: "@TRAIN_NET_CONFIG@"
 #test_net: "@TEST_NET_CONFIG@"
-test_iter: 5
-test_interval: 1000
+#test_iter: 5
+#test_interval: 50
 base_lr: @LR@
 lr_policy: "fixed"
 display: 10
@@ -11,7 +10,5 @@ momentum: @MOMENTUM@
 weight_decay: @WEIGHT_DECAY@
 snapshot: @SNAPSHOT_ITER@
 snapshot_prefix: "@EXPERIMENT_NAME@"
-#termination_criterion: MAX_ITER
 device_id: 0
-#snapshot_on_exit: 1
 snapshot_after_train: 1
