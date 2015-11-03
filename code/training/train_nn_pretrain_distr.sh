@@ -20,7 +20,8 @@ CONFIG_OUT_PATH=$ROOT_PATH/data/nets_config/${ARCH_NAME}/result
 TRAIN_NET_COMMAND="${CAFFE_TOOLS_PATH}/caffe train -solver"
 
 # IMPORTANT TO CHANGE DATA_PATH
-DATA_PATH="$HOME/workspace/OlympicSports/exemplar_cnn/${DATASET_NAME}_leveldb"  
+#DATA_PATH="$HOME/workspace/OlympicSports/exemplar_cnn/${DATASET_NAME}_leveldb"  
+DATA_PATH="$HOME/caffe_otput/${DATASET_NAME}_leveldb" 
 SAVE_PATH="$HOME/workspace/OlympicSports/exemplar_cnn/results/${EXPERIMENT_NAME}"
 LOG_FILE=$SAVE_PATH/train_log.txt
 
@@ -228,6 +229,17 @@ echo " " >> $LOG_FILE
 echo "==== Start training ====" >> $LOG_FILE
 echo " " >> $LOG_FILE
 
+# ============= utility function def =============
+exit_if_failed()
+{
+    ret_code=$1
+    if [ $ret_code -ne 0 ]; then
+        echo "Command failed with ERROR code ${ret_code}!"
+        exit $ret_code
+    fi
+}
+# ================================================
+
 # start pretraining
 
 echo ""
@@ -237,6 +249,7 @@ echo ""
 
 GLOG_logtostderr=1 ${TRAIN_NET_COMMAND} \
 ${CONFIG_OUT_PATH}/pretrain_solver.prototxt 2>> $LOG_FILE
+exit_if_failed $? 
 
 # run real training
 
@@ -252,6 +265,7 @@ echo ""
 
 GLOG_logtostderr=1 ${TRAIN_NET_COMMAND} \
 ${CONFIG_OUT_PATH}/solver0.prototxt -snapshot ${SAVE_PATH}/${EXPERIMENT_NAME}_pretrain_iter_${INIT_NUM_ITER}.solverstate 2>> $LOG_FILE
+exit_if_failed $? 
 
 echo ""
 echo " ====== Second run ====== "
@@ -260,6 +274,7 @@ echo ""
 
 GLOG_logtostderr=1 ${TRAIN_NET_COMMAND} \
 ${CONFIG_OUT_PATH}/solver1.prototxt -snapshot ${SAVE_PATH}/${EXPERIMENT_NAME}_iter_${END_ITER_0}.solverstate 2>> $LOG_FILE
+exit_if_failed $? 
 
 echo ""
 echo " ====== Third run ====== "
@@ -268,6 +283,7 @@ echo ""
 
 GLOG_logtostderr=1 ${TRAIN_NET_COMMAND} \
 ${CONFIG_OUT_PATH}/solver2.prototxt -snapshot ${SAVE_PATH}/${EXPERIMENT_NAME}_iter_${END_ITER_1}.solverstate 2>> $LOG_FILE
+exit_if_failed $? 
 
 echo ""
 echo " ====== Fourth run ====== "
@@ -276,6 +292,7 @@ echo ""
 
 GLOG_logtostderr=1 ${TRAIN_NET_COMMAND} \
 ${CONFIG_OUT_PATH}/solver3.prototxt -snapshot ${SAVE_PATH}/${EXPERIMENT_NAME}_iter_${END_ITER_2}.solverstate 2>> $LOG_FILE
+exit_if_failed $? 
 
 echo ""
 echo " ====== Fifth run ====== "
@@ -284,6 +301,7 @@ echo ""
 
 GLOG_logtostderr=1 ${TRAIN_NET_COMMAND} \
 ${CONFIG_OUT_PATH}/solver4.prototxt -snapshot ${SAVE_PATH}/${EXPERIMENT_NAME}_iter_${END_ITER_3}.solverstate 2>> $LOG_FILE
+exit_if_failed $? 
 
 if [ "${POSTFIX}" -gt 1 ]
 then

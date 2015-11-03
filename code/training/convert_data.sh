@@ -1,4 +1,14 @@
 # # convert data
+# ============= utility function def =============
+exit_if_failed()
+{
+    ret_code=$1
+    if [ $ret_code -ne 0 ]; then
+        echo "Command failed with ERROR code ${ret_code}!"
+        exit $ret_code
+    fi
+}
+# ================================================
 
 # define variables
 IN_FILE=$1
@@ -10,6 +20,7 @@ if [ "$4" = "randomize" ]; then
     echo "Randomly permuting the image set"
     RANDOMIZE=1
 fi
+
 
 echo "----CAFFE_ROOT=${CAFFE_ROOT}"
 mkdir -p $OUT_PATH
@@ -31,6 +42,7 @@ if [ ! -f $BINARY_DATAFILE ]; then
     matlab_to_binary(images, labels, '"$BINARY_DATAFILE"', "$RANDOMIZE");\
     exit;"
 fi
+exit_if_failed $? 
 
 # convert data
 echo " === Converting binaries to the Caffe format === "
@@ -41,12 +53,16 @@ $BINARY_DATAFILE \
 $DB_FOLDER \
 $DB_BACKEND
 
+exit_if_failed $? 
+
 # compute mean value
 echo " === Computing mean image === "
 ${CAFFE_TOOLS_PATH}/compute_image_mean.bin \
+-backend $DB_BACKEND \
 $DB_FOLDER \
-$OUT_PATH/mean.binaryproto \
-$DB_BACKEND
+$OUT_PATH/mean.binaryproto
+
+exit_if_failed $? 
 
 #rm $BINARY_DATAFILE
 

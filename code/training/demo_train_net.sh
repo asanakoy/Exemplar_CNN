@@ -1,5 +1,6 @@
-CATEGORY_NAME='basketball_layup'
-DATA_DIR="$HOME/workspace/OlympicSports/exemplar_cnn"
+CATEGORY_NAME='bowling'
+#DATA_DIR="$HOME/workspace/OlympicSports/exemplar_cnn"
+DATA_DIR="$HOME/caffe_otput" 
 LEVELDB_DIR="${DATA_DIR}/${CATEGORY_NAME}_leveldb"
 
 if [ ! -d ${LEVELDB_DIR} ]; then
