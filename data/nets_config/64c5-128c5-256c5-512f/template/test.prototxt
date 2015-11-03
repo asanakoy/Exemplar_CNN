@@ -1,19 +1,21 @@
 name: "CaffeNet"
-layers {
+layer {
   name: "data"
-  type: DATA
+  type: "Data"
   top: "data"
   top: "label"
-  data_param {
-    source: "@DATASET@/data-leveldb"
+  transform_param {
     mean_file: "@MEAN_FOLDER@/mean.binaryproto"
-    batch_size: @BATCHSIZE@
     scale: 0.00390625
   }
+  data_param {
+    source: "@DATASET@/data-leveldb"
+    batch_size: @BATCHSIZE@
+  }
 }
-layers {
+layer {
   name: "conv1"
-  type: CONVOLUTION
+  type: "Convolution"
   bottom: "data"
   top: "conv1"
   convolution_param {
@@ -23,15 +25,15 @@ layers {
     stride: 1
   }
 }
-layers {
+layer {
   name: "relu1"
-  type: RELU
+  type: "ReLU"
   bottom: "conv1"
   top: "conv1"
 }
-layers {
+layer {
   name: "pool1"
-  type: POOLING
+  type: "Pooling"
   bottom: "conv1"
   top: "pool1"
   pooling_param {
@@ -40,9 +42,9 @@ layers {
     stride: 2
   }
 }
-layers {
+layer {
   name: "conv2"
-  type: CONVOLUTION
+  type: "Convolution"
   bottom: "pool1"
   top: "conv2"
   convolution_param {
@@ -51,15 +53,15 @@ layers {
     kernel_size: 5
   }
 }
-layers {
+layer {
   name: "relu2"
-  type: RELU
+  type: "ReLU"
   bottom: "conv2"
   top: "conv2"
 }
-layers {
+layer {
   name: "pool2"
-  type: POOLING
+  type: "Pooling"
   bottom: "conv2"
   top: "pool2"
   pooling_param {
@@ -68,9 +70,9 @@ layers {
     stride: 2
   }
 }
-layers {
+layer {
   name: "conv3"
-  type: CONVOLUTION
+  type: "Convolution"
   bottom: "pool2"
   top: "conv3"
   convolution_param {
@@ -79,45 +81,45 @@ layers {
     kernel_size: 5
   }
 }
-layers {
+layer {
   name: "relu3"
-  type: RELU
+  type: "ReLU"
   bottom: "conv3"
   top: "conv3"
 }
-layers {
+layer {
   name: "fc6"
-  type: INNER_PRODUCT
+  type: "InnerProduct"
   bottom: "conv3"
   top: "fc6"
   inner_product_param {
     num_output: 512
   }
 }
-layers {
+layer {
   name: "relu6"
-  type: RELU
+  type: "ReLU"
   bottom: "fc6"
   top: "fc6"
 }
-layers {
+layer {
   name: "fc7"
-  type: INNER_PRODUCT
+  type: "InnerProduct"
   bottom: "fc6"
   top: "fc7"
   inner_product_param {
     num_output: @NUM_CLASSES@
   }
 }
-layers {
+layer {
   name: "prob"
-  type: SOFTMAX
+  type: "Softmax"
   bottom: "fc7"
   top: "prob"
 }
-layers {
+layer {
   name: "accuracy"
-  type: ACCURACY
+  type: "Accuracy"
   bottom: "prob"
   bottom: "label"
   top: "accuracy"

@@ -1,7 +1,8 @@
 train_net: "@TRAIN_NET_CONFIG@"
-test_net: "@TEST_NET_CONFIG@"
+test_net: "@TRAIN_NET_CONFIG@"
+#test_net: "@TEST_NET_CONFIG@"
 test_iter: 5
-test_interval: 50
+test_interval: 1000
 base_lr: @LR@
 lr_policy: "fixed"
 display: 10
