@@ -197,7 +197,7 @@ fi
 # remove old stuff
 
 INIT_PATH=`pwd`
-rm -r $SAVE_PATH
+#rm -r $SAVE_PATH
 mkdir -p $SAVE_PATH
 cd $SAVE_PATH
 
@@ -303,12 +303,12 @@ GLOG_logtostderr=1 ${TRAIN_NET_COMMAND} \
 ${CONFIG_OUT_PATH}/solver4.prototxt -snapshot ${SAVE_PATH}/${EXPERIMENT_NAME}_iter_${END_ITER_3}.solverstate 2>> $LOG_FILE
 exit_if_failed $? 
 
-if [ "${POSTFIX}" -gt 1 ]
-then
-  echo ""
-  echo "Deleting the training data ${DATA_PATH}"
-  echo ""
-  rm -rf $DATA_PATH
-fi
+#if [ "${POSTFIX}" -gt 1 ]
+#then
+#  echo ""
+#  echo "Deleting the training data ${DATA_PATH}"
+#  echo ""
+#  rm -rf $DATA_PATH
+#fi
 
 cd $INIT_PATH
