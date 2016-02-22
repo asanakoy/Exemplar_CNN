@@ -39,7 +39,7 @@ function [] = matlab_to_binary(images, labels, out_file_name, randomize, append,
         labels = labels(image_perm);
     end
     
-    images = permute(images,[2 1 3 4]);
+    images = permute(images,[2 1 3 4]); % transpose image before dumping into binary file
 
     tic;
     for n=1:size(images,4)

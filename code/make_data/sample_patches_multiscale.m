@@ -108,7 +108,7 @@ while npatch<num_patches
     ncurrscale = randp(scale_probs,1);
     ncurrimage = randp(image_probs,1);
     if nnz(sampling_probmap{ncurrimage}{ncurrscale}) > 0
-        currinds = randp(sampling_probmap{ncurrimage}{ncurrscale}(:),1);
+        currinds = randp(sampling_probmap{ncurrimage}{ncurrscale}(:),1); % pick the random point
         [currx, curry] = ind2sub(size(sampling_probmap{ncurrimage}{ncurrscale}),currinds);
 
         %[currx, curry] ./ size(sampling_probmap{ncurrimage}{ncurrscale}),
