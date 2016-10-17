@@ -1,6 +1,13 @@
-Code used in the paper "Discriminative Unsupervised Feature Learning with Convolutional Neural Networks", NIPS 2014
+This is unofficial fork of the Code used in the paper "Discriminative Unsupervised Feature Learning with Convolutional Neural Networks", NIPS 2014
 
-Copyright (c) 2014 Alexey Dosovitskiy
+Original code: Copyright (c) 2014 Alexey Dosovitskiy
+
+Updated Code: Artsiom Sanakoyeu, 2016
+
+
+We have used this code to train Exemplar CNN for comparison with CliqueCNN on Olympci Sports dataset.
+
+For details see our paper "CliqueCNN: Deep Unsupervised Exemplar Learning", Miguel A. Bautista, Artsiom Sanakoyeu, Ekaterina Sutter, Björn Ommer (https://arxiv.org/abs/1608.08792)
 
 ------------------------------
 Terms of use
