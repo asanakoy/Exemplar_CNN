@@ -51,9 +51,3 @@ For dataset creation, see code/make_data/augment_patches_distr.m .
 For converting data from matlab to leveldb or lmdb, see code/training/demo_convert_data.sh ( after correcting some paths in convert_data.sh ). 
 
 The configuration files include 'template' files which should be used with train_nn_pretrain.sh script, and test.prototxt files which may be used for testing with a pretrained network. Some of the files are in 'old' format which was previously used by caffe.
-
-------------------------------
-Bugs
-------------------------------
-
-Please report any bugs to Alexey Dosovitskiy ( dosovits@cs.uni-freiburg.de )
